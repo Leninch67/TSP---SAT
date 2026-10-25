@@ -1,8 +1,9 @@
+package com.mycompany.tsp.sat;
 
 public class Grafo {
-    private int numeroCiudades;
-    private int[][] distancias;
-    private int costoMaximo;
+    private final int numeroCiudades;
+    private final int[][] distancias;
+    private final int costoMaximo;
 
     public Grafo(int numeroCiudades, int[][] distancias, int costoMaximo) {
         this.numeroCiudades = numeroCiudades;
@@ -22,4 +23,3 @@ public class Grafo {
         return costoMaximo;
     }
 }
-
