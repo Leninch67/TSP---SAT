@@ -1,31 +1,30 @@
+package com.mycompany.tsp.sat;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.reader.DimacsReader;
-import org.sat4j.specs.ISolver;
+
 import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
 
 public class SolucionadorSAT {
 
     public void resolver(String archivoCNF, Grafo grafo) throws Exception {
         ISolver solver = SolverFactory.newDefault();
         DimacsReader lector = new DimacsReader(solver);
-        IProblem problema = lector.parseInstance(new File(archivoCNF));
+        //IProblem problema = lector.parseInstance(new File(archivoCNF));
+        IProblem problema = lector.parseInstance(archivoCNF);
 
         if (!problema.isSatisfiable()) {
             System.out.println(
-                "NO existe ninguna ruta con costo menor o igual a K"
-            );
+                    "NO existe ninguna ruta con costo menor o igual a K");
             return;
         }
 
-        int[] modelo = problema.model();
         Set<Integer> verdaderas = new HashSet<>();
 
-        for (int literal : modelo) {
+        for (int literal : problema.model()) {
             if (literal > 0) {
                 verdaderas.add(literal);
             }
@@ -39,7 +38,7 @@ public class SolucionadorSAT {
             ruta[paso] = -1;
 
             for (int ciudad = 0; ciudad < n; ciudad++) {
-                int variable = ciudad * n + paso + 1;
+                int variable = 2 + ciudad * n + paso;
 
                 if (verdaderas.contains(variable)) {
                     ruta[paso] = ciudad;
@@ -49,12 +48,11 @@ public class SolucionadorSAT {
 
             if (ruta[paso] == -1) {
                 throw new IllegalStateException(
-                    "No se pudo reconstruir la ruta"
-                );
+                        "No se pudo reconstruir la ruta");
             }
         }
 
-        int costo = 0;
+        long costo = 0;
 
         System.out.print("Ruta encontrada: ");
 
